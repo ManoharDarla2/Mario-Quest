@@ -1,0 +1,1 @@
+MENU_PATH = 'C:/Users/Administrator/PycharmProjects/Mario-Quest/assets/images/menu'

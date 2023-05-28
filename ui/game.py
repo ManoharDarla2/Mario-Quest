@@ -1,7 +1,7 @@
 import pyglet
 from pyglet.window import Window, mouse
-from menu import Menu
 from main import Main
+from sprite.menu import MenuSprite
 
 
 class Game(Window):
@@ -12,7 +12,7 @@ class Game(Window):
         """
         super().__init__(800,600)
         self.main = Main()
-        self.menu = Menu()
+        self.menu = MenuSprite()
         self.batch = pyglet.graphics.Batch()
 
     def on_draw(self):
@@ -20,13 +20,17 @@ class Game(Window):
         self.main.draw()
         self.menu.draw()
 
+    def update(self, dt):
+        self.menu.fade_update(dt)
+
     def on_mouse_press(self, x, y, button, modifiers):
         if button == mouse.LEFT:
-            if self.menu.start(x, y):
-                self.menu.hide()
+            if self.menu.is_clicked(x, y):
+                self.menu.fade()
 
 
 
 if __name__ == '__main__':
     window = Game()
+    pyglet.clock.schedule_interval(window.update, 1 / 60)
     pyglet.app.run()

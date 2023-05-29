@@ -32,4 +32,3 @@ class MenuSprite(Sprite):
                 self.visible = False
             else:
                 self.opacity = int((1 - (self.fade_elapsed / self.fade_duration)) * self.original_opacity)
-

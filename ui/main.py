@@ -20,3 +20,5 @@ class Main:
         self.sky.visible = True
         self.ground.visible = True
 
+    def get_ground_height(self):
+        return self.ground.y + self.ground.height

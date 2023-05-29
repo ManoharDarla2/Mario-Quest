@@ -2,33 +2,40 @@ import pyglet
 from pyglet.window import Window, mouse
 from main import Main
 from sprite.menu import MenuSprite
+from ui.sprite.mario import Mario
 
+game = Window(800, 600)
 
-class Game(Window):
+main = Main()
+menu = MenuSprite()
+mario = Mario(0, main.get_ground_height()-10)
 
-    def __init__(self):
-        """
-        A game window class from pyglet.window.Window used for our mario game.
-        """
-        super().__init__(800, 600)
-        self.main = Main()
-        self.menu = MenuSprite()
+@game.event
+def on_draw():
+    game.clear()
+    main.draw()
+    menu.draw()
+    mario.draw()
 
-    def on_draw(self):
-        self.clear()
-        self.main.draw()
-        self.menu.draw()
+@game.event
+def on_key_press(symbol, modifiers):
+    mario.animation(symbol)
 
-    def update(self, dt):
-        self.menu.fade_update(dt)
+@game.event
+def on_key_release(symbol, modifiers):
+    mario.animation_end(symbol)
 
-    def on_mouse_press(self, x, y, button, modifiers):
-        if button == mouse.LEFT:
-            if self.menu.is_clicked(x, y):
-                self.menu.fade()
+def update(dt):
+    menu.fade_update(dt)
+    mario.move(dt)
+
+@game.event
+def on_mouse_press(x, y, button, modifiers):
+    if button == mouse.LEFT:
+        if menu.is_clicked(x, y):
+            menu.fade()
 
 
 if __name__ == '__main__':
-    window = Game()
-    pyglet.clock.schedule_interval(window.update, 1 / 60)
+    pyglet.clock.schedule_interval(update, 1 / 60)
     pyglet.app.run()

@@ -1,12 +1,14 @@
-import pyglet
 from pyglet.sprite import Sprite
-from pyglet.image import load
-from utils.paths import MENU_PATH
+from utils.resources import menu
+
 
 class MenuSprite(Sprite):
+
+    """
+    A Menu Sprite that shows before start of a game
+    """
     
     def __init__(self):
-        menu = load(f'{MENU_PATH}/menu.png')
         super().__init__(menu)
         self.position = 200, 150, 0
         self.original_opacity = self.opacity
@@ -15,7 +17,7 @@ class MenuSprite(Sprite):
         self.fading = False
 
     def is_clicked(self, x, y):
-        return self.x + 95 <= x <= self.y + 330 and self.y + 20 <= y <= self.y + 55
+        return self.x + 95 <= x <= self.y + 380 and self.y + 20 <= y <= self.y + 55
 
     def fade(self):
         self.fading = True

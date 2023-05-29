@@ -10,10 +10,9 @@ class Game(Window):
         """
         A game window class from pyglet.window.Window used for our mario game.
         """
-        super().__init__(800,600)
+        super().__init__(800, 600)
         self.main = Main()
         self.menu = MenuSprite()
-        self.batch = pyglet.graphics.Batch()
 
     def on_draw(self):
         self.clear()
@@ -27,7 +26,6 @@ class Game(Window):
         if button == mouse.LEFT:
             if self.menu.is_clicked(x, y):
                 self.menu.fade()
-
 
 
 if __name__ == '__main__':

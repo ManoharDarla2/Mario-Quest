@@ -1,5 +1,5 @@
 LSHIFT        = 0xffe1
-SPACE         = 0xff20
+SPACE         = 0x020
 ENTER         = 0xff0d
 HOME          = 0xff50
 LEFT          = 0xff51

@@ -9,10 +9,12 @@ class Mario(Sprite):
 
     def __init__(self, x, y):
         super().__init__(stand(s_duration)[0])
+        self.is_end = False
+        self.time_elapsed = 0
         self.position = x, y, 0
         self.scale = 0.45
-        self.speed = 150
-        self.duration = 0.065
+        self.speed = 200
+        self.duration = 0.06
         self.is_right = True
         self.is_moving = False
 

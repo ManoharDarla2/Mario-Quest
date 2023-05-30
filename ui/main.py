@@ -22,3 +22,10 @@ class Main:
 
     def get_ground_height(self):
         return self.ground.y + self.ground.height
+
+    def get_ground(self):
+        return self.ground
+
+    def set_ground(self, x=None, y=None):
+        self.ground.x = x if x is not None else self.ground.x
+        self.ground.y = y if y is not None else self.ground.y

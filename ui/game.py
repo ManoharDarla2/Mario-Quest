@@ -15,8 +15,7 @@ def coins(n, batch):
     cs = []
     for i in range(n):
         coin_x = random.randint(400, 7800)
-        c = Coin(coin_x,batch)
-        c.scale = 0.2
+        c = Coin(coin_x, batch)
         cs.append(c)
     return cs
 

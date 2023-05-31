@@ -13,4 +13,4 @@ if __name__ == '__main__':
     run_images = os.listdir(f'{scale_path}/coins')
     run_images.sort()
     for image in run_images:
-        image_scale(f'{scale_path}/coins/{image}', f'{out}/{image}', scale=0.25)
+        image_scale(f'{scale_path}/coins/{image}', f'{out}/{image}', scale=0.04)

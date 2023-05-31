@@ -7,12 +7,6 @@ from utils.resources import *
 from utils.keys import *
 
 
-class GroundFrame(Batch):
-
-    def __init__(self):
-        super().__init__()
-
-
 class Ground(Sprite):
 
     def __init__(self, x, y, batch):
@@ -37,6 +31,10 @@ class Ground(Sprite):
 
     def on_motion(self):
         return self.is_moving
+
+    def attach(self, sprite):
+        sprite.y = self.height
+        sprite.x = self.x
 
 
 

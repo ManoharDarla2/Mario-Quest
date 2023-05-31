@@ -6,6 +6,7 @@ from utils.paths import *
 # Props and Backgrounds
 sky_img = load(f'{MAIN_PATH}/sky.png')
 ground_img = load(f'{MAIN_PATH}/ground_pattern.png')
+mountains_img = load(f'{MAIN_PATH}/mountain_pattern.png')
 menu = load(f'{MENU_PATH}/menu.png')
 
 # Mario Image Paths

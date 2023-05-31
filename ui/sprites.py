@@ -121,6 +121,6 @@ class Mario(Sprite):
 
 class Coin(Sprite):
 
-    def __init__(self, x):
-        super().__init__(coin_anim)
+    def __init__(self, x, batch):
+        super().__init__(coin_anim, batch=batch)
         self.last_x = x

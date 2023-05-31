@@ -30,8 +30,6 @@ is_cloud_movement = False
 def on_draw():
     game.clear()
     frame.draw()
-    # for i in cns:
-    #     i.draw()
 
 @game.event
 def on_key_press(symbol, modifiers):

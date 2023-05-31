@@ -37,7 +37,20 @@ class Ground(Sprite):
 
     def attach_coin(self, c):
         c.y = self.height
-        c.x = c.last_x + self.x
+        self.attach_pos(c)
+    def attach_pos(self, sprite):
+        sprite.x = sprite.last_x + self.x
+
+class Brick(Sprite):
+
+    def __init__(self, x, y, batch):
+        super().__init__(brick_img, x, y, batch=batch)
+        self.last_x = x
+
+    def is_on_block(self, n, sprite):
+        return self.x - (sprite.width // 2) <= sprite.x <= (self.x + self.width * n) - (sprite.width // 2) and \
+            self.y + self.height <= sprite.y <= self.y + self.height + 10
+
 
 
 
@@ -124,3 +137,21 @@ class Coin(Sprite):
     def __init__(self, x, batch):
         super().__init__(coin_anim, batch=batch)
         self.last_x = x
+
+def coins(n, batch):
+    cs = []
+    for i in range(n):
+        coin_x = random.randint(450, 7800)
+        c = Coin(coin_x, batch)
+        cs.append(c)
+    return cs
+
+def brick_pattern(batch, n = 1, start_x = 0, y = 0):
+    b1 = Brick(start_x, y, batch)
+    bk = [b1]
+    brick_x = b1.x + b1.width
+    for i in range(n):
+        brick = Brick(brick_x, y, batch)
+        brick_x += b1.width
+        bk.append(brick)
+    return bk

@@ -11,15 +11,8 @@ ground = Ground(0, 0, frame)
 mountains = Sprite(mountains_img, batch=frame)
 mario = Mario(0, ground.height - 10, frame)
 
-def coins(n, batch):
-    cs = []
-    for i in range(n):
-        coin_x = random.randint(400, 7800)
-        c = Coin(coin_x, batch)
-        cs.append(c)
-    return cs
-
 cns = coins(30, frame)
+bks = brick_pattern(frame, 10, 200, 200)
 
 clouds.y = 300
 is_cloud_movement = False
@@ -57,11 +50,17 @@ def update(dt):
         ground.attach_coin(i)
         if i.x + i.width >= mario.x >= i.x and mario.y <= i.y + i.height:
             i.visible = False
-    if mario.x + mario.width >= 300.1:
+    for i in bks:
+        ground.attach_pos(i)
+    if bks[0].is_on_block(len(bks), mario):
+        mario.y = bks[0].y + bks[0].height
+        mario.velocity_y = 0
+    if mario.x >= 300.1:
         mario.x = 300
         ground.move(dt)
     elif mario.x <= 0:
         mario.x = 0.1
+        mario.move(dt)
 
 
 

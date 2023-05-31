@@ -18,10 +18,14 @@ run_left_path = [path.replace('/run\\', '/run/left/') for path in run_path]
 stand_right_path = [f'{MARIO_PATH}/stand/stand1.png', f'{MARIO_PATH}/stand/stand2.png']
 stand_left_path = [f'{MARIO_PATH}/stand/left/stand1.png', f'{MARIO_PATH}/stand/left/stand2.png']
 
+coin_path = glob.glob(pathname=f'{ASSETS_PATH}/images/coins/c*.png')
+coins_path = [path.replace('\\', '/') for path in coin_path]
+
 run_right = [load(path) for path in run_right_path]
 run_left = [load(path) for path in run_left_path]
 stand_right = [load(path) for path in stand_right_path]
 stand_left = [load(path) for path in stand_left_path]
+coin = [load(path) for path in coins_path]
 
 
 def run(duration):
@@ -34,3 +38,5 @@ def stand(duration):
     right = animation.Animation.from_image_sequence(stand_right, duration)
     left = animation.Animation.from_image_sequence(stand_left, duration)
     return right, left
+
+coin_anim = animation.Animation.from_image_sequence(coin, 0.1)

@@ -11,6 +11,17 @@ ground = Ground(0, 0, frame)
 mountains = Sprite(mountains_img, batch=frame)
 mario = Mario(0, ground.height - 10, frame)
 
+def coins(n):
+    cs = []
+    for i in range(n):
+        coin_x = random.randint(400, 7800)
+        c = Coin(coin_x)
+        c.scale = 0.2
+        cs.append(c)
+    return cs
+
+cns = coins(30)
+
 clouds.y = 300
 is_cloud_movement = False
 
@@ -20,6 +31,8 @@ is_cloud_movement = False
 def on_draw():
     game.clear()
     frame.draw()
+    for i in cns:
+        i.draw()
 
 @game.event
 def on_key_press(symbol, modifiers):
@@ -42,9 +55,12 @@ def update(dt):
     mario.on_jump(dt)
     ground.attach(mountains)
     clouds.x -= 220 * dt if is_cloud_movement else 10 * dt
-
     mario.move(dt)
-    if mario.x >= 300.1:
+    for i in cns:
+        ground.attach_coin(i)
+        if mario.x >= i.x:
+            i.visible = False
+    if mario.x + mario.width >= 300.1:
         mario.x = 300
         ground.move(dt)
     elif mario.x <= 0:

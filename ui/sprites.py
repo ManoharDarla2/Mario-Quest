@@ -1,6 +1,5 @@
 import pyglet
-import time
-import pymunk
+import random
 from pyglet.sprite import Sprite
 from pyglet.graphics import Batch
 from utils.resources import *
@@ -35,6 +34,10 @@ class Ground(Sprite):
     def attach(self, sprite):
         sprite.y = self.height
         sprite.x = self.x
+
+    def attach_coin(self, c):
+        c.y = self.height
+        c.x = c.last_x + self.x
 
 
 
@@ -115,3 +118,9 @@ class Mario(Sprite):
                 self.image = run(self.duration)[1]
             self.is_right = False
             self.is_moving = True
+
+class Coin(Sprite):
+
+    def __init__(self, x):
+        super().__init__(coin_anim)
+        self.last_x = x

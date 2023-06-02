@@ -4,6 +4,26 @@ from pyglet.sprite import Sprite
 from pyglet.graphics import Batch
 from utils.resources import *
 from utils.keys import *
+from audio import *
+
+
+class Base(Sprite):
+
+    def __init__(self, img, x, y, batch):
+        super().__init__(img, x=x, y=y, batch=batch)
+        self.last_x = x
+
+    def is_above(self, n, sprite):
+        return self.x - (sprite.width // 2) <= sprite.x <= (self.x + self.width * n) - (sprite.width // 2) and \
+            self.y + self.height <= sprite.y <= self.y + self.height + 10
+
+    def is_below(self, n, sprite):
+        return self.x - (sprite.width // 2) <= sprite.x <= (self.x + self.width * n) - (sprite.width // 2) and \
+            self.y >= sprite.y + sprite.height
+
+    def is_touched(self, sprite):
+        return self.x + (self.width // 2) >= sprite.x >= self.x - (sprite.width // 2) and \
+            sprite.y <= self.y + self.height and self.visible
 
 
 class Ground(Sprite):
@@ -15,43 +35,23 @@ class Ground(Sprite):
         self.is_moving = False
 
     def run(self, symbol):
-        self._move(symbol)
+        if symbol == RIGHT:
+            self.is_moving = True
 
     def stop(self, symbol):
-        self.is_moving = False
+        if symbol == RIGHT:
+            self.is_moving = True
+        if symbol == SPACE:
+            self.is_moving = True
 
     def move(self, dt):
         if self.is_moving:
             self.x -= self.speed * dt
 
-    def _move(self, symbol):
-        if symbol == RIGHT:
-            self.is_moving = True
-
-    def on_motion(self):
-        return self.is_moving
-
-    def attach(self, sprite):
-        sprite.y = self.height
-        sprite.x = self.x
-
-    def attach_coin(self, c):
-        c.y = self.height
-        self.attach_pos(c)
-    def attach_pos(self, sprite):
+    def attach(self, sprite, is_on_base):
+        if is_on_base:
+            sprite.y = self.y + self.height
         sprite.x = sprite.last_x + self.x
-
-class Brick(Sprite):
-
-    def __init__(self, x, y, batch):
-        super().__init__(brick_img, x, y, batch=batch)
-        self.last_x = x
-
-    def is_on_block(self, n, sprite):
-        return self.x - (sprite.width // 2) <= sprite.x <= (self.x + self.width * n) - (sprite.width // 2) and \
-            self.y + self.height <= sprite.y <= self.y + self.height + 10
-
-
 
 
 class Menu(Sprite):
@@ -95,31 +95,17 @@ class Mario(Sprite):
         self.is_right = True
         self.is_moving = False
 
-    def on_jump(self, dt):
+    def jump(self, dt):
         self.y += self.velocity_y * dt
-        self.velocity_y -= 500 * dt
+        self.velocity_y -= 800 * dt
         if self.y < self.def_y:
             self.y = self.def_y
             self.velocity_y = 0
 
-    def animation(self, symbol):
-        if symbol == SPACE:
+    def start(self, symbol):
+        if symbol == SPACE and self.y <= self.def_y + 10:
             self.velocity_y = 400
-        self._move(symbol)
 
-    def move(self, dt):
-        if self.is_moving:
-            if self.is_right:
-                self.x += self.speed * dt
-            else:
-                self.x -= self.speed * dt
-
-    def animation_end(self, symbol):
-        if symbol == RIGHT or symbol == LEFT:
-            self.image = stand(0.35)[0] if self.is_right else stand(0.35)[1]
-        self.is_moving = False
-
-    def _move(self, symbol):
         if symbol == RIGHT:
             if self.image != run(self.duration)[0]:
                 self.image = run(self.duration)[0]
@@ -132,26 +118,51 @@ class Mario(Sprite):
             self.is_right = False
             self.is_moving = True
 
-class Coin(Sprite):
+    def move(self, dt):
+        if self.is_moving:
+            if self.is_right:
+                self.x += self.speed * dt
+            else:
+                self.x -= self.speed * dt
 
-    def __init__(self, x, batch):
-        super().__init__(coin_anim, batch=batch)
+    def stop(self, symbol):
+        if symbol == RIGHT or symbol == LEFT:
+            self.image = stand(0.35)[0] if self.is_right else stand(0.35)[1]
+            self.is_moving = False
+
+
+class Coins:
+
+    def __init__(self, x, y, batch):
         self.last_x = x
+        self.y = y
+        self.batch = batch
+        self.coins = []
 
-def coins(n, batch):
-    cs = []
-    for i in range(n):
-        coin_x = random.randint(450, 7800)
-        c = Coin(coin_x, batch)
-        cs.append(c)
-    return cs
+    def create(self, n, start, end):
+        self.coins = []
+        for i in range(n):
+            coin_x = random.randint(start, end)
+            c = Base(coin_anim, x=coin_x, y=self.y, batch=self.batch)
+            self.coins.append(c)
+        return self.coins
 
-def brick_pattern(batch, n = 1, start_x = 0, y = 0):
-    b1 = Brick(start_x, y, batch)
+    def collected(self, player, base):
+        points = 0
+        for c in self.coins:
+            base.attach(c, True)
+            if c.is_touched(player):
+                coin_sfx.play()
+                c.visible = False
+                points += 1
+        return points
+
+def brick_pattern(batch, n=1, start_x=0, y=0):
+    b1 = Base(brick_img, start_x, y, batch)
     bk = [b1]
     brick_x = b1.x + b1.width
     for i in range(n):
-        brick = Brick(brick_x, y, batch)
+        brick = Base(brick_img, brick_x, y, batch)
         brick_x += b1.width
         bk.append(brick)
     return bk

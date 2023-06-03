@@ -102,6 +102,7 @@ class Mario(Sprite):
 
     def start(self, symbol):
         if symbol == SPACE and self.y <= self.def_y + 10:
+            jump_sfx.play()
             self.velocity_y = 500
 
         if symbol == RIGHT:
@@ -128,15 +129,14 @@ class Mario(Sprite):
             self.image = stand(0.35)[0] if self.is_right else stand(0.35)[1]
             self.is_moving = False
 
-    def is_dead(self, enemies):
-        for enemy in enemies:
-            return enemy.x + (enemy.width // 2) >= self.x >= enemy.x - (self.width // 2) and \
+    def is_dead(self, enemy):
+        return enemy.x + (enemy.width // 2) >= self.x >= enemy.x - (self.width // 2) and \
                 self.y <= enemy.y + enemy.height and enemy.visible
 
 
 class Coins:
 
-    def __init__(self, x, y, batch):
+    def __init__(self, y, batch):
         self.y = y
         self.batch = batch
         self.coins = []

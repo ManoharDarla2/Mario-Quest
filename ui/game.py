@@ -2,7 +2,6 @@ import pyglet
 from pyglet.window import Window, mouse
 from sprites import *
 from audio import theme
-from utils.paths import ASSETS_PATH
 
 game = Window(800, 600)
 frame = pyglet.graphics.Batch()
@@ -12,8 +11,8 @@ ground = Ground(0, 0, frame)
 mountains = Base(mountains_img, 0, ground.height, batch=frame)
 mario = Mario(0, ground.height - 10, frame)
 
-coins = Coins(0, ground.height, frame)
-coins.create(30, 400, 8000)
+coins = Coins(ground.height, frame)
+coins.create(random.randint(20, 40), 400, 8000)
 
 brick_pattern = ['________',
                  '______',
@@ -33,6 +32,7 @@ bricks.create()
 
 enemies = Enemy([900, 1800, 2700, 3600, 4500, 5400, 6300], 83, frame)
 
+theme.volume = 0.3
 theme.play()
 
 points = 0
@@ -98,7 +98,13 @@ def update(dt):
     elif mario.x <= 0:
         mario.x = 0.1
         mario.move(dt)
-    if mario.is_dead(enemies.get()):
+    is_alive = True
+    for enemy in enemies.get():
+        if mario.is_dead(enemy):
+            is_alive = False
+
+    if not is_alive:
+        death_sfx.play()
         lose_label.visible = True
         is_lose = True
 

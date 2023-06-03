@@ -1,4 +1,3 @@
-import pyglet
 import random
 from pyglet.sprite import Sprite
 from utils.resources import *
@@ -129,6 +128,11 @@ class Mario(Sprite):
             self.image = stand(0.35)[0] if self.is_right else stand(0.35)[1]
             self.is_moving = False
 
+    def is_dead(self, enemies):
+        for enemy in enemies:
+            return enemy.x + (enemy.width // 2) >= self.x >= enemy.x - (self.width // 2) and \
+                self.y <= enemy.y + enemy.height and enemy.visible
+
 
 class Coins:
 
@@ -154,9 +158,10 @@ class Coins:
                 points = 1
         return points
 
+
 class Bricks:
 
-    def __init__(self, patterns,  xs, ys, batch):
+    def __init__(self, patterns, xs, ys, batch):
         self.ys = ys
         self.batch = batch
         self.brick_set = []
@@ -164,6 +169,8 @@ class Bricks:
         self.patterns = patterns
         self.xs = xs
         self.width = brick_img.width
+        self.pos_x = []
+        self.pos_width = []
 
     def create(self):
         for j, pattern in enumerate(self.patterns):
@@ -172,14 +179,32 @@ class Bricks:
                 b = Base(brick_img, x=brick_x, y=self.ys[j], batch=self.batch)
                 brick_x += brick_img.width
                 self.bricks.append(b)
-                if i == len(pattern)-1:
+                if i == len(pattern) - 1:
                     self.brick_set.append(self.bricks)
                     self.bricks = []
-        print(len(self.bricks))
+                self.pos_x.append(self.xs[j])
+                self.pos_width.append(self.xs[j] * len(pattern))
+
     def set(self, ground, player):
         for bricks in self.brick_set:
             for brick in bricks:
                 ground.attach(brick, False)
             if bricks[0].is_above(len(bricks), player):
-                    player.y = bricks[0].y + bricks[0].height
-                    player.velocity_y = 0
+                player.y = bricks[0].y + bricks[0].height
+                player.velocity_y = 0
+
+
+class Enemy:
+
+    def __init__(self, xs, y, batch):
+        self.enemies = []
+        for x in xs:
+            en = Base(brick_img, x, y, batch)
+            self.enemies.append(en)
+
+    def move(self, speed):
+        for enemy in self.enemies:
+            enemy.x -= speed
+
+    def get(self):
+        return self.enemies

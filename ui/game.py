@@ -1,5 +1,3 @@
-import pyglet
-import time
 from pyglet.window import Window, mouse
 from sprites import *
 from audio import theme
@@ -14,6 +12,9 @@ mario = Mario(0, ground.height - 10, frame)
 
 coins = Coins(0, ground.height, frame)
 coins.create(30, 400, 8000)
+
+bricks = Bricks(['_______'], [200], [200], frame)
+bricks.create()
 
 theme.play()
 

@@ -1,7 +1,6 @@
 import pyglet
 import random
 from pyglet.sprite import Sprite
-from pyglet.graphics import Batch
 from utils.resources import *
 from utils.keys import *
 from audio import *
@@ -104,7 +103,7 @@ class Mario(Sprite):
 
     def start(self, symbol):
         if symbol == SPACE and self.y <= self.def_y + 10:
-            self.velocity_y = 400
+            self.velocity_y = 500
 
         if symbol == RIGHT:
             if self.image != run(self.duration)[0]:
@@ -134,14 +133,12 @@ class Mario(Sprite):
 class Coins:
 
     def __init__(self, x, y, batch):
-        self.last_x = x
         self.y = y
         self.batch = batch
         self.coins = []
 
     def create(self, n, start, end):
-        self.coins = []
-        for i in range(n):
+        for _ in range(n):
             coin_x = random.randint(start, end)
             c = Base(coin_anim, x=coin_x, y=self.y, batch=self.batch)
             self.coins.append(c)
@@ -154,8 +151,34 @@ class Coins:
             if c.is_touched(player):
                 coin_sfx.play()
                 c.visible = False
-                points += 1
+                points = 1
         return points
+
+class Bricks:
+
+    def __init__(self, patterns,  xs, ys, batch):
+        self.ys = ys
+        self.batch = batch
+        self.bricks = []
+        self.patterns = patterns
+        self.xs = xs
+        self.width = brick_img.width
+        self.pos_x = []
+        self.pos_width = []
+        self.pos_y = []
+
+    def create(self):
+        for j, pattern in enumerate(self.patterns):
+            brick_x = self.xs[j] + brick_img.width
+            for i, _ in enumerate(pattern):
+                b = Base(brick_img, x=brick_x, y=self.ys[j], batch=self.batch)
+                brick_x += brick_img.width
+                self.bricks.append(b)
+                if i == len(pattern)-1:
+                    print('reached', len(pattern))
+            # self.pos_x.append(self.xs[j])
+            # self.pos_width.append(self.xs[j] + b.width)
+            # self.pos_y.append(self.ys[j])
 
 def brick_pattern(batch, n=1, start_x=0, y=0):
     b1 = Base(brick_img, start_x, y, batch)

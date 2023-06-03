@@ -159,13 +159,11 @@ class Bricks:
     def __init__(self, patterns,  xs, ys, batch):
         self.ys = ys
         self.batch = batch
+        self.brick_set = []
         self.bricks = []
         self.patterns = patterns
         self.xs = xs
         self.width = brick_img.width
-        self.pos_x = []
-        self.pos_width = []
-        self.pos_y = []
 
     def create(self):
         for j, pattern in enumerate(self.patterns):
@@ -175,17 +173,13 @@ class Bricks:
                 brick_x += brick_img.width
                 self.bricks.append(b)
                 if i == len(pattern)-1:
-                    print('reached', len(pattern))
-            # self.pos_x.append(self.xs[j])
-            # self.pos_width.append(self.xs[j] + b.width)
-            # self.pos_y.append(self.ys[j])
-
-def brick_pattern(batch, n=1, start_x=0, y=0):
-    b1 = Base(brick_img, start_x, y, batch)
-    bk = [b1]
-    brick_x = b1.x + b1.width
-    for i in range(n):
-        brick = Base(brick_img, brick_x, y, batch)
-        brick_x += b1.width
-        bk.append(brick)
-    return bk
+                    self.brick_set.append(self.bricks)
+                    self.bricks = []
+        print(len(self.bricks))
+    def set(self, ground, player):
+        for bricks in self.brick_set:
+            for brick in bricks:
+                ground.attach(brick, False)
+            if bricks[0].is_above(len(bricks), player):
+                    player.y = bricks[0].y + bricks[0].height
+                    player.velocity_y = 0

@@ -13,7 +13,16 @@ mario = Mario(0, ground.height - 10, frame)
 coins = Coins(0, ground.height, frame)
 coins.create(30, 400, 8000)
 
-bricks = Bricks(['_______'], [200], [200], frame)
+brick_pattern = ['________',
+                 '______',
+                 '____________',
+                 '_____',
+                 '____'
+                 ]
+
+brick_x = [300, 700, 1300, 2400, 3000]
+
+bricks = Bricks(brick_pattern, brick_x, [200] * 5, frame)
 bricks.create()
 
 theme.play()
@@ -46,6 +55,7 @@ def update(dt):
     ground.attach(mountains, True)
     ground.attach(clouds, False)
     mario.move(dt)
+    bricks.set(ground, mario)
     points += coins.collected(mario, ground)
     # for i in cns:
     #     ground.attach_coin(i)

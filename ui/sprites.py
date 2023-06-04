@@ -54,30 +54,11 @@ class Ground(Base):
 
 class Menu(Sprite):
 
-    def __init__(self, x, y, batch):
-        super().__init__(menu, x=x, y=y, batch=batch)
-        self.original_opacity = self.opacity
-        self.fade_duration = 0.5
-        self.fade_elapsed = 0.0
-        self.fading = False
+    def __init__(self, x, y):
+        super().__init__(menu, x=x, y=y)
 
     def is_clicked(self, x, y):
         return self.x + 95 <= x <= self.y + 380 and self.y + 20 <= y <= self.y + 55
-
-    def fade(self):
-        self.fading = True
-        self.fade_elapsed = 0.0
-
-    def fade_update(self, dt):
-        if self.fading:
-            self.fade_elapsed += dt
-            if self.fade_elapsed >= self.fade_duration:
-                self.opacity = 0
-                self.fading = False
-                self.visible = False
-            else:
-                self.opacity = int((1 - (self.fade_elapsed / self.fade_duration)) * self.original_opacity)
-
 
 class Mario(Sprite):
 

@@ -31,6 +31,7 @@ stand_right = [load(path) for path in stand_right_path]
 stand_left = [load(path) for path in stand_left_path]
 coin = [load(path) for path in coins_path]
 enemy_img = [load(path) for path in enemy_path]
+coin_img = load(f'{ASSETS_PATH}/images/coins/c1.png')
 
 
 def run(duration):

@@ -10,7 +10,6 @@ __pycache__/
 .Python
 assets/raw
 assets/scripts
-utils/utils.py
 build/
 develop-eggs/
 dist/

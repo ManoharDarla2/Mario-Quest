@@ -24,10 +24,10 @@ class Base(Sprite):
             sprite.y <= self.y + self.height and self.visible
 
 
-class Ground(Sprite):
+class Ground(Base):
 
     def __init__(self, x, y, batch):
-        super().__init__(ground_img, x, y, 0, batch=batch)
+        super().__init__(ground_img, x, y, batch)
         self.speed = 200
         self.is_right = True
         self.is_moving = False

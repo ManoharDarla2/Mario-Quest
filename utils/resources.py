@@ -10,6 +10,7 @@ mountains_img = load(f'{MAIN_PATH}/mountain_pattern.png')
 clouds_img = load(f'{MAIN_PATH}/clouds_pattern.png')
 brick_img = load(f'{MAIN_PATH}/brick.png')
 menu = load(f'{MENU_PATH}/menu.png')
+castle_img = load(f'{MAIN_PATH}/castle.png')
 
 # Mario Image Paths
 run_path = glob.glob(pathname=f'{MARIO_PATH}/run/run*.png')

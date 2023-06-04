@@ -5,9 +5,12 @@ from audio import theme
 
 game = Window(800, 600)
 frame = pyglet.graphics.Batch()
+end = pyglet.graphics.Batch()
 sky = Sprite(sky_img, 0, 0, batch=frame)
 clouds = Base(clouds_img, 0, 300, frame)
 ground = Ground(0, 0, frame)
+ground2 = Ground(8000, 0, frame)
+castle = Base(castle_img, 8000, 93, batch=frame)
 mountains = Base(mountains_img, 0, ground.height, batch=frame)
 mario = Mario(0, ground.height - 10, frame)
 
@@ -30,7 +33,9 @@ brick_x = [400, 1200, 2400, 3200, 4000, 5500, 6000, 6700, 7500]
 bricks = Bricks(brick_pattern, brick_x, [200] * len(brick_pattern), frame)
 bricks.create()
 
-enemies = Enemy([900, 1800, 2700, 3600, 4500, 5400, 6300], 83, frame)
+enemy_x = [400, 1000, 1500, 1800, 1900, 2500, 2800, 3200, 3600, 4000, 4500,5000,
+           5300, 5700, 6000, 6400, 6900, 7300, 7700, 8000, 8300, 8600, 9000, 9100]
+enemies = Enemy(enemy_x, 83, frame)
 
 theme.volume = 0.3
 theme.play()
@@ -76,21 +81,19 @@ def on_key_release(symbol, modifiers):
     ground.stop(symbol)
 
 
-@game.event
-def on_close():
-    print(points)
-
-
 def update(dt):
     global points, is_lose
     mario.jump(dt)
     ground.attach(mountains, True)
     ground.attach(clouds, False)
+    ground.attach(ground2, False)
+    ground.attach(castle, False)
     mario.move(dt)
     bricks.set(ground, mario)
     points += coins.collected(mario, ground)
     score_label.text = f'{points}'
     enemies.move(50 * dt)
+
     if mario.x >= 300.1:
         mario.x = 300
         ground.move(dt)
@@ -98,6 +101,7 @@ def update(dt):
     elif mario.x <= 0:
         mario.x = 0.1
         mario.move(dt)
+
     is_alive = True
     for enemy in enemies.get():
         if mario.is_dead(enemy):

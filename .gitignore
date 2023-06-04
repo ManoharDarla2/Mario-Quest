@@ -9,6 +9,8 @@ __pycache__/
 # Distribution / packaging
 .Python
 assets/raw
+assets/scripts
+utils/utils.py
 build/
 develop-eggs/
 dist/

@@ -199,7 +199,7 @@ class Enemy:
     def __init__(self, xs, y, batch):
         self.enemies = []
         for x in xs:
-            en = Base(brick_img, x, y, batch)
+            en = Base(enemy_anim, x, y, batch)
             self.enemies.append(en)
 
     def move(self, speed):

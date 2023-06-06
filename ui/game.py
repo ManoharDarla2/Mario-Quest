@@ -134,6 +134,7 @@ def update(dt):
         else:
             # end of game
             mario.jump(dt)
+            mario.down(dt)
             ground.attach(mountains, True)
             ground.attach(clouds, False)
             ground.attach(ground2, False)

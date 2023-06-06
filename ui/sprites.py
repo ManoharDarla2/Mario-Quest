@@ -113,6 +113,7 @@ class Mario(Sprite):
 
     def __init__(self, x, y, batch):
         super().__init__(stand(0.35)[0], x=x, y=y, batch=batch)
+        self.is_down = False
         self.def_y = y
         self.velocity_y = 0
         self.gravity = -600
@@ -155,6 +156,9 @@ class Mario(Sprite):
             self.is_right = False
             self.is_moving = True
 
+        if symbol == DOWN:
+            self.is_down = True
+
     def move(self, dt):
         """
             Method to move the mario left and right
@@ -165,6 +169,17 @@ class Mario(Sprite):
                 self.x += self.speed * dt
             else:
                 self.x -= self.speed * dt
+
+    def down(self, dt):
+        """
+            Method to get down from brick platform
+        :param dt: Update argument
+        """
+        if self.is_down:
+            self.y -= 70 * dt
+            if self.y <= 83:
+                self.y = 83
+                self.is_down = False
 
     def stop(self, symbol):
         """

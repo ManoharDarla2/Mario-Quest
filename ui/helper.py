@@ -1,5 +1,3 @@
-import pyglet
-
 menu_fade = False
 fade_elapsed = 0.0
 

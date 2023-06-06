@@ -17,6 +17,8 @@ castle = Base(castle_img, 8000, 93, batch=frame)
 door = Sprite(door_img, 8000, 93)
 mountains = Base(mountains_img, 0, ground.height, batch=frame)
 mario = Mario(0, ground.height - 10, frame)
+pole = Base(pole_img, 7500, 93, frame)
+end = Sprite(end_img, 0, 0)
 
 coins = Coins(ground.height, frame)
 coins.create(random.randint(20, 30), 400, 7300)
@@ -37,9 +39,9 @@ brick_x = [800, 1500, 2400, 3200, 4000, 5500, 6000, 6700, 7500]
 bricks = Bricks(brick_pattern, brick_x, [200] * len(brick_pattern), frame)
 bricks.create()
 
-enemy_x = [400, 1000, 1500, 1800, 1900, 2500, 2800, 3200, 3600, 4000, 4500, 5000,
-           5300, 5700, 6000, 6400, 6900, 7300, 7700, 8000, 8300, 8600, 9000, 9100]
-enemies = Enemy([2000], 83, frame)
+enemy_x = [900, 1300, 1800, 2300, 2800, 3500, 3600, 4200, 4650, 5050, 5425,
+           6000, 6350, 6900, 7300, 7710, 8150, 8650, 9100, 9800]
+enemies = Enemy(enemy_x, 83, frame)
 
 theme.volume = 0.3
 theme.play()
@@ -65,6 +67,8 @@ end_label = pyglet.text.Label("YOU \n LOST",
 
 end_label.visible = False
 door.visible = False
+end.opacity = 0
+end_fade = 0
 
 is_lose = False
 is_win = False
@@ -84,6 +88,7 @@ def on_draw():
     menu.draw()
     if is_stopped:
         mario.image = stand(0.35)[0]
+    end.draw()
 
 
 @game.event
@@ -101,25 +106,28 @@ def on_key_release(symbol, modifiers):
 
 
 def update(dt):
-    global points, is_lose, is_win, is_stopped, is_started
+    global points, is_lose, is_win, is_stopped, is_started, end_fade
     fade_menu(menu, 0.5, dt)
     if is_started:
         door.x = castle.x
         door.y = castle.y
         if ground2.x <= 400:
             if not is_stopped:
+                mario.y = 93
                 mario.x += 10 * dt
                 ground.x -= 170 * dt
                 ground2.x -= 170 * dt
                 castle.x -= 170 * dt
                 clouds.x -= 170 * dt
                 mountains.x -= 170 * dt
+                pole.x -= 170 * dt
         else:
             mario.jump(dt)
             ground.attach(mountains, True)
             ground.attach(clouds, False)
             ground.attach(ground2, False)
-            ground.attach(castle, False)
+            ground.attach(castle, True)
+            ground.attach(pole, True)
             mario.move(dt)
             bricks.set(ground, mario)
             points += coins.collected(mario, ground)
@@ -144,12 +152,13 @@ def update(dt):
                 death_sfx.play()
                 end_label.visible = True
                 is_lose = True
-
         if is_win:
-            end_label.text = "You \n Win"
-            end_label.visible = True
-            mario.y = 93
             door.visible = True
+            end_fade += dt
+            if end_fade < 1:
+                end.opacity = int((end_fade / 1) * 255)
+
+
 
         if mario.x + mario.width >= castle.x + (castle.width // 2) + 35:
             is_stopped = True

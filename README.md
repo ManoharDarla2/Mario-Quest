@@ -35,10 +35,10 @@
 ### How to Play
 
 1. **Controls:**
-    - Move left: <left arrow key>
-    - Move right: <right arrow key>
-    - Jump: <space key>
-    - Down: <down arrow key>
+    - Move left: < left arrow key >
+    - Move right: < right arrow key >
+    - Jump: < space key >
+    - Down: < down arrow key >
 2. **Objective:**
   - Guide Mario to overcome obstacles and enemies.
   - Collect as many coins as possible to increase your score.

@@ -48,7 +48,10 @@
   - Timing is crucial for jumping on enemies to escape them.
   
 ### Contributions
-  
+    - D.Manohar(112201034)         :Front end(image collections , added scripts and helper resource file, sfx collection , created main menu ,  added super mario and its moments , fade animation , scenery creation , )
+    - A.Saicharn(122201038)        :Back end(added brick patterns and fixed brick collision , added enemy behaviour , end screens)
+     - G.Venkata Ganesh(112201031) :Middle part(added mountain and cloud motion , coin collection , brick collision )
+
 ### Acknowledgements
   - The Super Mario game concept and characters are the intellectual property of Nintendo.
   - SFX was taken from [SFX](https://themushroomkingdom.net/media/smb/wav)
